@@ -72,4 +72,28 @@ const updateAppointmentStatus = async (req, res) => {
   }
 };
 
-module.exports = { createAppointment, getAppointments, updateAppointmentStatus };
+//Eliminar citas
+const deleteAppointment = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const appointment = await Appointment.findById(id);
+    if (!appointment) return res.status(404).json({ error: 'Cita no encontrada' });
+
+    const isOwner = appointment.user.toString() === req.user.userId;
+    const isAdmin = req.user.role === 'admin';
+
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ error: 'No tienes permisos para eliminar esta cita' });
+    }
+
+    await appointment.deleteOne();
+    res.json({ message: 'Cita eliminada con éxito 🗑️' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al eliminar la cita ❌' });
+  }
+};
+
+
+module.exports = { createAppointment, getAppointments, updateAppointmentStatus, deleteAppointment };

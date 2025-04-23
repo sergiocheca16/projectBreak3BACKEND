@@ -63,6 +63,7 @@ Método	Ruta	                Descripción
 POST	/api/appointments	    Crear una nueva cita
 GET	    /api/appointments	    Listar citas del usuario (admin ve todas)
 PUT	    /api/appointments/:id   Actualizar estado y fecha (solo admin)
+DELETE  /api/apointments/:id    Eliminar cita 
 
 ---
 
